@@ -1,1 +1,7 @@
 spring.application.name=gps_tracker_backend
+server.port=8090
+spring.data.dynamodb.entity2ddl.auto=create-only
+aws.dynamodb.region=eu-west-1
+aws.dynamodb.endpoint=http://localhost:8000
+aws.credentials.access-key=EMPTY
+aws.credentials.secret-key=EMPTY
