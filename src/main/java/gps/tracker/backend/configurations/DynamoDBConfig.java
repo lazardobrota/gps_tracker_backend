@@ -14,7 +14,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableDynamoDBRepositories
-public class DynamoDBConfiguration {
+public class DynamoDBConfig {
 
     @Bean
     public AmazonDynamoDB amazonDynamoDB(AWSCredentials credentials, @Value("${aws.dynamodb.endpoint}") String dynamoDBURL, @Value("${aws.dynamodb.region}") String region) {

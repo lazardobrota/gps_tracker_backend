@@ -6,11 +6,11 @@ import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
 import lombok.Getter;
 
 @DynamoDBTable(tableName = "GPSTracker")
-public class GPSTable {
+public class UserCars {
 
-    @Getter(onMethod_ = @DynamoDBHashKey(attributeName = "pk"))
+    @DynamoDBHashKey(attributeName = "pk")
     private String pk;
 
-    @Getter(onMethod_ = @DynamoDBRangeKey(attributeName = "sk"))
+    @DynamoDBRangeKey(attributeName = "sk")
     private String sk;
 }

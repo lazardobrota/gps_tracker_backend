@@ -2,14 +2,11 @@ package gps.tracker.backend.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public class UserCreateRequest {
+@Getter
+public class UserUpdateRequest {
 
     @NotBlank
     @NotNull
