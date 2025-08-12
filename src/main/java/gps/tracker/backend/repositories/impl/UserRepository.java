@@ -23,7 +23,7 @@ public class UserRepository implements IUserRepository {
     @Override
     public List<User> findAll() {
         DynamoDBQueryExpression<User> query = new DynamoDBQueryExpression<User>()
-                .withIndexName(Index.UserIndex.toString())
+                .withIndexName(Index.ENTITY_INDEX.getName())
                 .withKeyConditionExpression("entityType = :entityType")
                 .withExpressionAttributeValues(Map.of(":entityType", new AttributeValue().withS(EntityType.USER.toString())))
                 .withConsistentRead(false);

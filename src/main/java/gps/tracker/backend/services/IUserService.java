@@ -1,9 +1,9 @@
 package gps.tracker.backend.services;
 
-import gps.tracker.backend.requests.UserCreateRequest;
-import gps.tracker.backend.requests.UserPasswordResetRequest;
-import gps.tracker.backend.requests.UserUpdateRequest;
-import gps.tracker.backend.responses.UserResponse;
+import gps.tracker.backend.dto.requests.user.UserCreateRequest;
+import gps.tracker.backend.dto.requests.user.UserPasswordResetRequest;
+import gps.tracker.backend.dto.requests.user.UserUpdateRequest;
+import gps.tracker.backend.dto.responses.UserResponse;
 
 import java.util.List;
 

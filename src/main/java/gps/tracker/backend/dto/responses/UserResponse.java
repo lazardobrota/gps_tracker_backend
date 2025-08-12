@@ -1,4 +1,4 @@
-package gps.tracker.backend.responses;
+package gps.tracker.backend.dto.responses;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

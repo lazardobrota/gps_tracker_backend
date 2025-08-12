@@ -1,10 +1,10 @@
 package gps.tracker.backend.controller;
 
 import gps.tracker.backend.endpoints.Endpoints;
-import gps.tracker.backend.requests.UserCreateRequest;
-import gps.tracker.backend.requests.UserPasswordResetRequest;
-import gps.tracker.backend.requests.UserUpdateRequest;
-import gps.tracker.backend.responses.UserResponse;
+import gps.tracker.backend.dto.requests.user.UserCreateRequest;
+import gps.tracker.backend.dto.requests.user.UserPasswordResetRequest;
+import gps.tracker.backend.dto.requests.user.UserUpdateRequest;
+import gps.tracker.backend.dto.responses.UserResponse;
 import gps.tracker.backend.services.IUserService;
 import gps.tracker.backend.utils.ExceptionUtils;
 import jakarta.validation.Valid;
@@ -22,13 +22,13 @@ public class UserController {
 
     //TODO Pagination
     @GetMapping(Endpoints.User.getAll)
-    public ResponseEntity<List<UserResponse>> getAll() {
+    public ResponseEntity<List<UserResponse>> findAll() {
         return ExceptionUtils.handleResponse(() -> ResponseEntity.ok(userService.findAll()));
     }
 
     //TODO Make it inside jwt token
     @GetMapping(Endpoints.User.getOne)
-    public ResponseEntity<UserResponse> getOne(@PathVariable("id") String id) {
+    public ResponseEntity<UserResponse> findOne(@PathVariable("id") String id) {
         return ExceptionUtils.handleResponse(() -> ResponseEntity.ok(userService.find(id)));
     }
 

@@ -1,8 +1,7 @@
-package gps.tracker.backend.requests;
+package gps.tracker.backend.dto.requests.user;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.Data;
 import lombok.Getter;
 
 @Getter
