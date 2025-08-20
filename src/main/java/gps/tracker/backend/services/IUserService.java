@@ -1,14 +1,13 @@
 package gps.tracker.backend.services;
 
+import gps.tracker.backend.dto.PageResult;
 import gps.tracker.backend.dto.requests.user.UserCreateRequest;
 import gps.tracker.backend.dto.requests.user.UserPasswordResetRequest;
 import gps.tracker.backend.dto.requests.user.UserUpdateRequest;
 import gps.tracker.backend.dto.responses.UserResponse;
 
-import java.util.List;
-
 public interface IUserService {
-    List<UserResponse> findAll();
+    PageResult<UserResponse> findAll();
 
     UserResponse find(String id);
 

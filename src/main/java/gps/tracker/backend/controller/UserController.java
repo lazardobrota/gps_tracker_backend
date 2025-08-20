@@ -1,18 +1,17 @@
 package gps.tracker.backend.controller;
 
-import gps.tracker.backend.endpoints.Endpoints;
+import gps.tracker.backend.dto.PageResult;
 import gps.tracker.backend.dto.requests.user.UserCreateRequest;
 import gps.tracker.backend.dto.requests.user.UserPasswordResetRequest;
 import gps.tracker.backend.dto.requests.user.UserUpdateRequest;
 import gps.tracker.backend.dto.responses.UserResponse;
+import gps.tracker.backend.endpoints.Endpoints;
 import gps.tracker.backend.services.IUserService;
 import gps.tracker.backend.utils.ExceptionUtils;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @AllArgsConstructor
 @RestController
@@ -22,7 +21,7 @@ public class UserController {
 
     //TODO Pagination
     @GetMapping(Endpoints.User.getAll)
-    public ResponseEntity<List<UserResponse>> findAll() {
+    public ResponseEntity<PageResult<UserResponse>> findAll() {
         return ExceptionUtils.handleResponse(() -> ResponseEntity.ok(userService.findAll()));
     }
 

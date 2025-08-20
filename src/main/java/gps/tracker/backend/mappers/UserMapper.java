@@ -1,10 +1,10 @@
 package gps.tracker.backend.mappers;
 
-import gps.tracker.backend.models.User;
 import gps.tracker.backend.dto.requests.user.UserCreateRequest;
 import gps.tracker.backend.dto.requests.user.UserPasswordResetRequest;
 import gps.tracker.backend.dto.requests.user.UserUpdateRequest;
 import gps.tracker.backend.dto.responses.UserResponse;
+import gps.tracker.backend.models.User;
 import gps.tracker.backend.utils.PasswordUtils;
 import org.springframework.stereotype.Component;
 

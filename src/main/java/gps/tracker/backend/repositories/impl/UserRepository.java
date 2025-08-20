@@ -1,45 +1,57 @@
 package gps.tracker.backend.repositories.impl;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBMapper;
-import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBQueryExpression;
-import com.amazonaws.services.dynamodbv2.model.AttributeValue;
+import gps.tracker.backend.configurations.DynamoDBTables;
 import gps.tracker.backend.models.User;
 import gps.tracker.backend.models.enums.EntityType;
 import gps.tracker.backend.models.enums.Index;
 import gps.tracker.backend.repositories.IUserRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Repository;
+import software.amazon.awssdk.enhanced.dynamodb.Key;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
+import software.amazon.awssdk.enhanced.dynamodb.model.QueryConditional;
 
-import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 @Repository
 @AllArgsConstructor
 public class UserRepository implements IUserRepository {
 
-    private DynamoDBMapper dynamoDBMapper;
+    private final DynamoDBTables tables;
 
     @Override
-    public List<User> findAll() {
-        DynamoDBQueryExpression<User> query = new DynamoDBQueryExpression<User>()
-                .withIndexName(Index.ENTITY_INDEX.getName())
-                .withKeyConditionExpression("entityType = :entityType")
-                .withExpressionAttributeValues(Map.of(":entityType", new AttributeValue().withS(EntityType.USER.toString())))
-                .withConsistentRead(false);
+    public Page<User> findAll() {
+        QueryConditional queryConditional = QueryConditional.keyEqualTo(
+                Key.builder().partitionValue(EntityType.USER.toString()).build()
+        );
 
-        return dynamoDBMapper.query(User.class, query);
+        return tables.getTable(User.class).index(Index.ENTITY_INDEX)
+                .query(request -> request
+                .queryConditional(queryConditional)
+                .exclusiveStartKey(null) //TODO add startKey
+                .limit(20) //TODO add limit
+        ).iterator().next();
+
+        //        DynamoDBQueryExpression<User> query = new DynamoDBQueryExpression<User>()
+//                .withIndexName(Index.ENTITY_INDEX)
+//                .withKeyConditionExpression("entityType = :entityType")
+//                .withExpressionAttributeValues(Map.of(":entityType", new AttributeValue().withS(EntityType.USER.toString())))
+//                .withConsistentRead(false);
+//
+//        return dynamoDBMapper.query(User.class, query);
     }
 
     @Override
     public User save(User user) {
-        dynamoDBMapper.save(user);
+        tables.getTable(User.class).putItem(user);
         return user;
     }
 
     @Override
     public Optional<User> load(String id) {
         String validId = User.pkPrefix + id;
-        return Optional.ofNullable(dynamoDBMapper.load(User.class, validId, validId));
+
+        Key key = Key.builder().partitionValue(validId).sortValue(validId).build();
+        return Optional.ofNullable(tables.getTable(User.class).getItem(key));
     }
 }

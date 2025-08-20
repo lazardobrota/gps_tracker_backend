@@ -1,23 +1,24 @@
 package gps.tracker.backend.services.impl;
 
+import gps.tracker.backend.dto.PageResult;
 import gps.tracker.backend.dto.query.CarQuery;
-import gps.tracker.backend.exceptions.HttpException;
-import gps.tracker.backend.mappers.CarMapper;
-import gps.tracker.backend.repositories.ICarRepository;
 import gps.tracker.backend.dto.requests.car.CarCreateRequest;
 import gps.tracker.backend.dto.responses.CarResponse;
+import gps.tracker.backend.exceptions.HttpException;
+import gps.tracker.backend.mappers.CarMapper;
+import gps.tracker.backend.models.Car;
+import gps.tracker.backend.repositories.ICarRepository;
 import gps.tracker.backend.repositories.IUserRepository;
 import gps.tracker.backend.services.ICarService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class CarService implements ICarService {
 
@@ -26,13 +27,14 @@ public class CarService implements ICarService {
     private final CarMapper carMapper;
 
     @Override
-    public List<CarResponse> findAll(CarQuery carQuery) {
-        return carRepository.findAll(carQuery).stream().map(carMapper::toCarResponse).collect(Collectors.toList());
+    public PageResult<CarResponse> findAll(CarQuery carQuery) {
+        Page<Car> cars = carRepository.findAll(carQuery);
+        return new PageResult<>(cars.items().stream().map(carMapper::toCarResponse).collect(Collectors.toList()), cars.lastEvaluatedKey());
     }
 
     @Override
     public CarResponse find(String id) {
-        return null; //TODO
+        return carMapper.toCarResponse(carRepository.load(id).orElseThrow(() -> new HttpException("No car with id: " + id, HttpStatus.BAD_REQUEST)));
     }
 
     @Override

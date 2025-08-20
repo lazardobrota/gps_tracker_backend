@@ -1,14 +1,6 @@
 package gps.tracker.backend.models.enums;
 
-import lombok.Getter;
-
-@Getter
-public enum Index {
-    ENTITY_INDEX("EntityIndex");
-
-    private final String name;
-
-    Index(String name) {
-        this.name = name;
-    }
+public final class Index {
+    public static final String ENTITY_INDEX = "EntityIndex";
+    public static final String SK_INDEX = "SKIndex";
 }

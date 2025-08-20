@@ -1,7 +1,5 @@
 package gps.tracker.backend.dto.responses;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
-import gps.tracker.backend.converters.LocalDateTimeConverter;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 

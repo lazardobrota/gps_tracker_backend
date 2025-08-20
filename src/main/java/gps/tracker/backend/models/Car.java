@@ -1,52 +1,33 @@
 package gps.tracker.backend.models;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import gps.tracker.backend.converters.LocalDateTimeConverter;
 import gps.tracker.backend.models.enums.EntityType;
+import gps.tracker.backend.models.enums.Index;
 import gps.tracker.backend.models.enums.Prefix;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.time.LocalDateTime;
 
-@DynamoDBTable(tableName = "GPSTracker")
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
+@DynamoDbBean
 public class Car {
 
     public static final String pkPrefix = Prefix.U.toLowerStringWithHash();
     public static final String skPrefix = Prefix.C.toLowerStringWithHash();
 
-    @DynamoDBHashKey(attributeName = "pk")
     private String pk;
-
-    @DynamoDBRangeKey(attributeName = "sk")
     private String sk;
-
-    @DynamoDBAttribute
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "EntityIndex")
     private String entityType;
-
-    @DynamoDBAttribute
     private String licensePlate;
-
-    @DynamoDBAttribute
     private String model;
-
-    @DynamoDBAttribute
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime yearOfProduction;
-
-    @DynamoDBAttribute
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime yearOfPurchase;
-
-    @DynamoDBAttribute
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
-
-    @DynamoDBAttribute
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime modifiedAt;
 
     public Car(String pk, String sk, String licensePlate, String model, LocalDateTime yearOfProduction, LocalDateTime yearOfPurchase, LocalDateTime createdAt, LocalDateTime modifiedAt) {
@@ -59,5 +40,41 @@ public class Car {
         this.yearOfPurchase = yearOfPurchase;
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
+    }
+
+    @DynamoDbPartitionKey
+    public String getPk() {
+        return pk;
+    }
+
+    @DynamoDbSortKey
+    @DynamoDbSecondaryPartitionKey(indexNames = Index.SK_INDEX)
+    public String getSk() {
+        return sk;
+    }
+
+    @DynamoDbSecondaryPartitionKey(indexNames = Index.ENTITY_INDEX)
+    public String getEntityType() {
+        return entityType;
+    }
+
+    @DynamoDbConvertedBy(LocalDateTimeConverter.class)
+    public LocalDateTime getYearOfProduction() {
+        return yearOfProduction;
+    }
+
+    @DynamoDbConvertedBy(LocalDateTimeConverter.class)
+    public LocalDateTime getYearOfPurchase() {
+        return yearOfPurchase;
+    }
+
+    @DynamoDbConvertedBy(LocalDateTimeConverter.class)
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @DynamoDbConvertedBy(LocalDateTimeConverter.class)
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
     }
 }

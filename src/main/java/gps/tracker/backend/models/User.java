@@ -1,56 +1,45 @@
 package gps.tracker.backend.models;
 
-import com.amazonaws.services.dynamodbv2.datamodeling.*;
 import gps.tracker.backend.converters.LocalDateTimeConverter;
 import gps.tracker.backend.models.enums.EntityType;
 import gps.tracker.backend.models.enums.Index;
 import gps.tracker.backend.models.enums.Prefix;
 import jakarta.validation.constraints.Email;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import software.amazon.awssdk.enhanced.dynamodb.mapper.annotations.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
-@DynamoDBTable(tableName = "GPSTracker")
+@DynamoDbBean
 public class User {
 
     public static final String pkPrefix = Prefix.U.toLowerStringWithHash();
     public static final String skPrefix = Prefix.U.toLowerStringWithHash();
 
-    @DynamoDBHashKey(attributeName = "pk")
     private String pk;
 
-    @DynamoDBRangeKey(attributeName = "sk")
     private String sk;
 
-    @DynamoDBAttribute
     private String firstName;
 
-    @DynamoDBAttribute
     private String lastName;
 
-    @DynamoDBAttribute
     @Email
     private String email;
 
-    @DynamoDBAttribute
-    @DynamoDBIndexHashKey(globalSecondaryIndexName = "EntityIndex")
     private String entityType;
 
-    @DynamoDBAttribute
     private String password;
 
-    @DynamoDBAttribute
     private String salt;
 
-    @DynamoDBAttribute
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime createdAt;
 
-    @DynamoDBAttribute
-    @DynamoDBTypeConverted(converter = LocalDateTimeConverter.class)
     private LocalDateTime modifiedAt;
 
     public User(String pk, String sk, String firstName, String lastName, String email, String password, String salt, LocalDateTime createdAt, LocalDateTime modifiedAt) {
@@ -64,5 +53,30 @@ public class User {
         this.createdAt = createdAt;
         this.modifiedAt = modifiedAt;
         this.entityType = EntityType.USER.toString();
+    }
+
+    @DynamoDbPartitionKey
+    public String getPk() {
+        return pk;
+    }
+
+    @DynamoDbSortKey
+    public String getSk() {
+        return sk;
+    }
+
+    @DynamoDbSecondaryPartitionKey(indexNames = Index.ENTITY_INDEX)
+    public String getEntityType() {
+        return entityType;
+    }
+
+    @DynamoDbConvertedBy(LocalDateTimeConverter.class)
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    @DynamoDbConvertedBy(LocalDateTimeConverter.class)
+    public LocalDateTime getModifiedAt() {
+        return modifiedAt;
     }
 }

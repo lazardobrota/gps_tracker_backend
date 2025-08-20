@@ -1,8 +1,8 @@
 package gps.tracker.backend.mappers;
 
-import gps.tracker.backend.models.Car;
 import gps.tracker.backend.dto.requests.car.CarCreateRequest;
 import gps.tracker.backend.dto.responses.CarResponse;
+import gps.tracker.backend.models.Car;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;

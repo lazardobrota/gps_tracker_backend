@@ -1,13 +1,13 @@
 package gps.tracker.backend.repositories;
 
 import gps.tracker.backend.models.User;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface IUserRepository {
 
-    List<User> findAll();
+    Page<User> findAll();
 
     Optional<User> load(String id);
 

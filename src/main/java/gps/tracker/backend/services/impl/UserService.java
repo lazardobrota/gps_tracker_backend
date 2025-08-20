@@ -1,25 +1,25 @@
 package gps.tracker.backend.services.impl;
 
-import gps.tracker.backend.exceptions.HttpException;
-import gps.tracker.backend.mappers.UserMapper;
-import gps.tracker.backend.models.User;
-import gps.tracker.backend.repositories.IUserRepository;
+import gps.tracker.backend.dto.PageResult;
 import gps.tracker.backend.dto.requests.user.UserCreateRequest;
 import gps.tracker.backend.dto.requests.user.UserPasswordResetRequest;
 import gps.tracker.backend.dto.requests.user.UserUpdateRequest;
 import gps.tracker.backend.dto.responses.UserResponse;
+import gps.tracker.backend.exceptions.HttpException;
+import gps.tracker.backend.mappers.UserMapper;
+import gps.tracker.backend.models.User;
+import gps.tracker.backend.repositories.IUserRepository;
 import gps.tracker.backend.services.IUserService;
 import gps.tracker.backend.utils.PasswordUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import software.amazon.awssdk.enhanced.dynamodb.model.Page;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@Transactional
+//@Transactional
 @RequiredArgsConstructor
 public class UserService implements IUserService {
 
@@ -27,8 +27,9 @@ public class UserService implements IUserService {
     private final UserMapper userMapper;
 
     @Override
-    public List<UserResponse> findAll() {
-        return userRepository.findAll().stream().map(userMapper::toUserResponse).collect(Collectors.toList());
+    public PageResult<UserResponse> findAll() {
+        Page<User> users = userRepository.findAll();
+        return new PageResult<>(users.items().stream().map(userMapper::toUserResponse).collect(Collectors.toList()), users.lastEvaluatedKey());
     }
 
     @Override
